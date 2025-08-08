@@ -2,10 +2,36 @@ import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
     palette: {
-        primary: { main: "#1976d2" },
-        secondary: { main: "#9c27b0" },
+        primary: {
+            main: '#7539FF',
+        },
+        secondary: {
+            main: '#878A99',
+        },
+        background: {
+            default: '#F5F7FA',
+            paper: '#FFFFFF',
+        },
     },
     typography: {
-        fontFamily: "Roboto, sans-serif",
+        fontFamily: 'Poppins',
+    },
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    borderRadius: 8,
+                },
+            },
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    borderRadius: 8,
+                    textTransform: 'none',
+                    fontWeight: 'bold',
+                },
+            },
+        },
     },
 });
