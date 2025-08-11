@@ -1,10 +1,9 @@
 import AppRoutes from "./router/routes";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { UserProvider } from "./context/UserContext ";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme/theme";
-
-const queryClient = new QueryClient();
+import { queryClient } from "./services/api-services/config";
 
 function App() {
   return (
