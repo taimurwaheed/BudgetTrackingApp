@@ -17,18 +17,57 @@ export const theme = createTheme({
         fontFamily: 'Poppins',
     },
     components: {
-        MuiOutlinedInput: {
+        // Overrides for TextField component
+        MuiTextField: {
             styleOverrides: {
                 root: {
-                    borderRadius: 8,
+                    "& .MuiFilledInput-root": {
+                        borderRadius: 8, // Set a default border radius for filled text fields
+                    },
                 },
             },
         },
+        // Overrides for Button component
         MuiButton: {
             styleOverrides: {
                 root: {
                     borderRadius: 8,
-                    textTransform: 'none',
+                    textTransform: 'none', // Prevents uppercase text
+                    fontWeight: 'bold',
+                },
+            },
+        },
+        // Overrides for Checkbox component
+        MuiCheckbox: {
+            styleOverrides: {
+                root: {
+                    color: '#7539FF', // Use primary color for the checkbox
+                },
+            },
+        },
+        // Overrides for FormControlLabel component
+        MuiFormControlLabel: {
+            styleOverrides: {
+                label: {
+                    fontSize: "0.875rem",
+                },
+            },
+        },
+        // Overrides for Link component
+        MuiLink: {
+            styleOverrides: {
+                root: {
+                    color: '#8B5CF6',
+                },
+            },
+        },
+        // Overrides for Typography component
+        MuiTypography: {
+            styleOverrides: {
+                h4: {
+                    fontWeight: 'bold',
+                },
+                h5: {
                     fontWeight: 'bold',
                 },
             },
