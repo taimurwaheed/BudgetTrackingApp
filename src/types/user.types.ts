@@ -1,9 +1,20 @@
+import { UserService } from "../services/user-service/userService";
+
 export type User = {
-    name: string;
+    id: string;
+    firstName: string;
+    lastName: string;
     email: string;
+    password: string;
+    budget?: string;
 } | null;
 
 export type UserContextType = {
-    user: User;
-    setUser: (user: User) => void;
+    user: any;
+    login: (user: any) => void;
+    logout: () => void;
 };
+
+export interface AppContextType {
+    userService: UserService;
+}
