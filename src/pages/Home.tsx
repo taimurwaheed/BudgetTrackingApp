@@ -1,7 +1,8 @@
 import { Typography, Button } from "@mui/material";
 import { Rocket } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useAuthProvider } from "../auth/useAuthProvider";
 
 function fetchDummyData() {
     return new Promise<string>((resolve) => {
@@ -16,6 +17,14 @@ export default function Home() {
         queryKey: ["dummyData"],
         queryFn: fetchDummyData,
     });
+
+    const navigate = useNavigate();
+    const { logout } = useAuthProvider();
+
+    const handleLogout = () => {
+        logout();
+        navigate("/login", { replace: true });
+    };
 
     return (
         <div style={{ padding: 20 }}>
@@ -34,6 +43,15 @@ export default function Home() {
                 startIcon={<Rocket size={20} />}
             >
                 Go to About
+            </Button>
+
+            <Button
+                onClick={handleLogout}
+                variant="contained"
+                color="error"
+                style={{ marginLeft: 10 }}
+            >
+                Logout
             </Button>
         </div>
     );
