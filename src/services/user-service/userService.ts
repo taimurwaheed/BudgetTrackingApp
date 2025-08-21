@@ -16,23 +16,24 @@ export class UserService {
                 throw new Error('Email already registered');
             }
 
-            return await this.client.post('/users', data);
+            const newUser = { ...data, id: Date.now().toString() };
+            return await this.client.post('/users', newUser);
 
         } catch (error: any) {
             if (error.message.includes('404')) {
-                console.log("Register user is: ", data)
-                return await this.client.post('/users', data);
+                const newUser = { ...data, id: Date.now().toString() };
+                return await this.client.post('/users', newUser);
             }
             throw new Error(error.message);
         }
     }
 
-    async loginUser(id: string, email: string, password: string): Promise<User | null> {
+    async loginUser(email: string, password: string): Promise<User | null> {
         try {
-            const user: User = await this.client.get(`/users/${id}`);
-            console.log("Fetched users by ID:", user);
-            if (user && user.email === email && user.password === password) {
-                return user;
+            const users: User[] = await this.client.get(`/users?email=${email}&password=${password}`);
+
+            if (users.length > 0) {
+                return users[0];
             }
             return null;
         } catch (error) {
@@ -57,17 +58,5 @@ export class UserService {
             console.error('User not found:', error);
             return null;
         }
-    }
-
-    async addUser(user: User): Promise<User> {
-        return await this.client.post('/users', user);
-    }
-
-    async updateUser(id: string, updatedUser: Partial<User>): Promise<User> {
-        return await this.client.put(`/users/${id}`, updatedUser);
-    }
-
-    async deleteUser(id: string) {
-        return await this.client.delete(`/users/${id}`);
     }
 }
