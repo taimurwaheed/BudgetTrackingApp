@@ -1,22 +1,22 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "../pages/Home";
-// import About from "../pages/About";
-import { BrowserRouter } from "react-router-dom";
+import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import ResetPassword from "../pages/ResetPassword";
-import { AuthProvider, useAuth } from "../auth/AuthContext";
 import type { ReactNode } from "react";
+import BudgetTracker from "../pages/Home";
+import { AppProvider } from "../context/AppContext";
+import { useCurrentUser } from "../services/api-hooks/user.hook";
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
-    const { user } = useAuth();
-    return user ? <>{children}</> : <Navigate to="/login" />;
+    const loggedInUser = useCurrentUser();
+
+    return loggedInUser ? <>{children}</> : <Navigate to="/login" />;
 };
 
 export default function AppRoutes() {
     return (
         <BrowserRouter>
-            <AuthProvider>
+            <AppProvider>
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
@@ -25,13 +25,13 @@ export default function AppRoutes() {
                         path="/home"
                         element={
                             <PrivateRoute>
-                                <Home />
+                                <BudgetTracker />
                             </PrivateRoute>
                         }
                     />
                     <Route path="*" element={<Navigate to="/login" />} />
                 </Routes>
-            </AuthProvider>
+            </AppProvider>
         </BrowserRouter>
     );
 }
