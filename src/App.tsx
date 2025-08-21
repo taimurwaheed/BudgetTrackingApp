@@ -1,17 +1,17 @@
 import AppRoutes from "./router/routes";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { UserProvider } from "./context/UserContext";
+import { AppProvider } from "./context/AppContext";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme/theme";
-import { queryClient } from "./services/api-services/config";
+import { queryClient } from "./services/api-config/config";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <UserProvider>
+        <AppProvider>
           <AppRoutes />
-        </UserProvider>
+        </AppProvider>
       </QueryClientProvider>
     </ThemeProvider >
   );
