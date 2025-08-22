@@ -6,9 +6,12 @@ import type { ReactNode } from "react";
 import BudgetTracker from "../pages/Home";
 import { AppProvider } from "../context/AppContext";
 import { useCurrentUser } from "../services/api-hooks/user.hook";
+import { CircularProgress } from "@mui/material";
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
-    const loggedInUser = useCurrentUser();
+    const { data: loggedInUser, isLoading } = useCurrentUser();
+
+    if (isLoading) return <CircularProgress />;
 
     return loggedInUser ? <>{children}</> : <Navigate to="/login" />;
 };

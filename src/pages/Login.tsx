@@ -41,16 +41,15 @@ const Login = () => {
     });
 
     const onSubmit = async (data: LoginFormInputs) => {
-        try {
-            await loginMutation(data);
-            navigate("/Home");
-        } catch (err) {
-            console.error("Login failed:", err);
+        const user = await loginMutation(data);
+        if (!user) {
             setError("email", {
                 type: "manual",
-                message: "Login failed. Please check your credentials.",
+                message: "Invalid email or password",
             });
+            return;
         }
+        navigate("/home");
     };
 
     return (
@@ -113,7 +112,7 @@ const Login = () => {
                         </Stack>
 
                         {/* Button */}
-                        <LoginButton type="submit" variant="contained" fullWidth >
+                        <LoginButton type="submit" variant="contained" fullWidth>
                             Login
                         </LoginButton>
                     </Stack>
