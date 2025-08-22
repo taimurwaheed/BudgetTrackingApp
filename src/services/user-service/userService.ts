@@ -15,15 +15,9 @@ export class UserService {
             if (users.length > 0) {
                 throw new Error('Email already registered');
             }
-
-            const newUser = { ...data, id: Date.now().toString() };
+            const newUser = { ...data };
             return await this.client.post('/users', newUser);
-
         } catch (error: any) {
-            if (error.message.includes('404')) {
-                const newUser = { ...data, id: Date.now().toString() };
-                return await this.client.post('/users', newUser);
-            }
             throw new Error(error.message);
         }
     }

@@ -23,7 +23,7 @@ export const useSignUp = () => {
 
 export const useLoginWithEmail = () => {
     const queryClient = useQueryClient();
-    const { userService, setCurrentUser } = useAppContext();
+    const { userService } = useAppContext();
 
     return useMutation({
         mutationKey: ["loginWithEmail"],
@@ -32,7 +32,6 @@ export const useLoginWithEmail = () => {
 
             if (response) {
                 localStorage.setItem(userKey, response.id);
-                setCurrentUser(response);
                 queryClient.invalidateQueries({ queryKey: ["currentUser"] });
             }
 
@@ -42,7 +41,7 @@ export const useLoginWithEmail = () => {
 };
 
 export const useCurrentUser = () => {
-    const { userService, setCurrentUser } = useAppContext();
+    const { userService } = useAppContext();
     const userId = localStorage.getItem(userKey);
 
     return useQuery<User | null>({
@@ -50,7 +49,6 @@ export const useCurrentUser = () => {
         queryFn: async () => {
             if (!userId) return null;
             const user = await userService.getUser(userId);
-            setCurrentUser(user);
             return user;
         }
     });
