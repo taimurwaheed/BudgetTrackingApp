@@ -13,7 +13,7 @@ import SignupImg from "../assets/images/SignupImg.png";
 import Logo from "../assets/images/Logo.png";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
-import type { SignUpFormInputs } from "../types/validationSchemas";
+import type { SignUpFormInputs } from "../types/form-input.types";
 import {
     Root,
     Wrapper,

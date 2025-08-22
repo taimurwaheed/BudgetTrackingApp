@@ -5,7 +5,9 @@ import Illustration from "../assets/images/Illustration.png";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Loginschema, type LoginFormInputs } from "../types/validationSchemas";
+import type { LoginFormInputs } from "../types/form-input.types";
+import { Loginschema } from "../utils/schemas";
+
 import {
     RootContainer,
     MainStack,
