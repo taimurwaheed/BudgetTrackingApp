@@ -1,58 +1,26 @@
-import { Typography, Button } from "@mui/material";
-import { Rocket } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useAuthProvider } from "../auth/useAuthProvider";
+import { useNavigate } from "react-router-dom"
+import { useLogout } from "../services/api-hooks/user.hook";
+import { Button, Box, Typography } from "@mui/material";
+import { useAppContext } from "../context/AppContext";
 
-function fetchDummyData() {
-    return new Promise<string>((resolve) => {
-        setTimeout(() => {
-            resolve("Data fetched successfully with React Query!");
-        }, 1000);
-    });
-}
-
-export default function Home() {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["dummyData"],
-        queryFn: fetchDummyData,
-    });
-
+export default function BudgetTracker() {
     const navigate = useNavigate();
-    const { logout } = useAuthProvider();
+    const logout = useLogout()
+    const { currentUser } = useAppContext();
 
     const handleLogout = () => {
         logout();
-        navigate("/login", { replace: true });
+        navigate("/login");
     };
 
     return (
-        <div style={{ padding: 20 }}>
-            <Typography variant="h4" gutterBottom>
-                Home Page
+        <Box sx={{ p: 2 }}>
+            <Typography>
+                Welcome to home page, {currentUser?.email}
             </Typography>
-
-            {isLoading && <Typography>Loading data...</Typography>}
-            {error && <Typography color="secondary">Error fetching data</Typography>}
-            {data && <Typography color="secondary" gutterBottom>{data}</Typography>}
-
-            <Button
-                component={Link}
-                to="/about"
-                variant="contained"
-                startIcon={<Rocket size={20} />}
-            >
-                Go to About
-            </Button>
-
-            <Button
-                onClick={handleLogout}
-                variant="contained"
-                color="error"
-                style={{ marginLeft: 10 }}
-            >
+            <Button variant="contained" color="primary" onClick={handleLogout}>
                 Logout
             </Button>
-        </div>
+        </Box>
     );
 }

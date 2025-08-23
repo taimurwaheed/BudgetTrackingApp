@@ -1,4 +1,5 @@
 import { UserService } from "../services/user-service/userService";
+import { ExpenseService } from "../services/expense-service/expenseService";
 
 export type User = {
     id: string;
@@ -9,12 +10,17 @@ export type User = {
     budget?: string;
 } | null;
 
-export type UserContextType = {
-    user: any;
-    login: (user: any) => void;
-    logout: () => void;
-};
-
 export interface AppContextType {
     userService: UserService;
+    expenseService: ExpenseService;
+    currentUser?: User
+    setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
+
+}
+
+export interface UserAuth {
+    user: User | null;
+    login: (user: User) => void;
+    logout: () => void;
+    isLoadingUser: boolean;
 }
