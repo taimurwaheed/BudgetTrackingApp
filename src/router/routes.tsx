@@ -2,17 +2,21 @@ import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import ResetPassword from "../pages/ResetPassword";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import BudgetTracker from "../pages/Home";
-import { AppProvider } from "../context/AppContext";
+import { AppProvider, useAppContext } from "../context/AppContext";
 import { useCurrentUser } from "../services/api-hooks/user.hook";
 import { CircularProgress } from "@mui/material";
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
+    const { setCurrentUser } = useAppContext();
     const { data: loggedInUser, isLoading } = useCurrentUser();
 
-    if (isLoading) return <CircularProgress />;
+    useEffect(() => {
+        if (loggedInUser) setCurrentUser(loggedInUser);
+    }, [loggedInUser, setCurrentUser]);
 
+    if (isLoading) return <CircularProgress />;
     return loggedInUser ? <>{children}</> : <Navigate to="/login" />;
 };
 
