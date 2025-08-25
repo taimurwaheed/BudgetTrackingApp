@@ -59,3 +59,11 @@ export interface ExpenseFiltersProps {
     selectedDate: string;
     setSelectedDate: (selectedDate: string) => void;
 }
+
+export interface SidebarHeaderProps {
+    collapsed: boolean;
+}
+
+export interface HeaderProps {
+    onToggleSidebar: () => void
+}

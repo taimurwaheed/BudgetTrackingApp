@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import type { Expense } from "../../types/expense.types";
+import { format } from "date-fns";
 
 export const useExpenseFilters = (expenses: Expense[]) => {
     const [sortBy, setSortBy] = useState("all");
@@ -18,7 +19,7 @@ export const useExpenseFilters = (expenses: Expense[]) => {
         if (selectedDate) {
             filteredExpenses = filteredExpenses.filter(
                 (expense) =>
-                    new Date(expense.date).toString() === selectedDate
+                    format(new Date(expense.date), "yyyy-MM-dd") === selectedDate
             );
         }
 
