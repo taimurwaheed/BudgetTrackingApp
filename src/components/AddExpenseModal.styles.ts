@@ -8,7 +8,7 @@ export const ModalBox = styled("form")(({ theme }) => ({
     transform: "translate(-50%, -50%)",
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(4),
-    borderRadius: 2,
+    borderRadius: 1,
     boxShadow: theme.shadows[5],
     width: 400,
     display: "flex",
@@ -22,4 +22,5 @@ export const SubmitButtonBox = styled(Box)({
 
 export const AddExpenseBtn = styled(Button)({
     marginTop: 4,
+    marginBottom: -10
 });
