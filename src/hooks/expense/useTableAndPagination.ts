@@ -7,7 +7,7 @@ export const useTableAndPagination = (data: Expense[]) => {
         pageCount,
         currentData,
         handlePageChange,
-    } = usePagination(data, 5);
+    } = usePagination(data, 8);
 
     return {
         page,
