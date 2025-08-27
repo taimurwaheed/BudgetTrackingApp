@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import type { ExpenseSchema, Loginschema, ResetPasswordSchema, Signupschema } from "../utils/schemas";
+import { ExpenseSchema, Loginschema, ResetPasswordSchema, Signupschema } from "../utils/schemas";
 
 export type LoginFormInputs = yup.InferType<typeof Loginschema>;
 
