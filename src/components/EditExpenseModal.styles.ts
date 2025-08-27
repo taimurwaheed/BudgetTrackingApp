@@ -5,7 +5,7 @@ export const ModalBox = styled(Box)(({ theme }) => ({
     padding: theme.spacing(4),
     backgroundColor: theme.palette.background.paper,
     margin: "auto",
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(20),
     width: 400,
     borderRadius: 2,
     boxShadow: theme.shadows[5],

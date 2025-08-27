@@ -1,7 +1,7 @@
 import type { Expense } from "../types/expense.types";
 
 export const mapApiExpense = (expense: any): Expense => ({
-    expenseId: expense.expenseId,
+    expenseId: expense.id,
     expense: expense.expense,
     totalExpenditure: expense.totalExpenditure,
     price: expense.price,

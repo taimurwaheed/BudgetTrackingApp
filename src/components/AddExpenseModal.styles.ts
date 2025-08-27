@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 export const ModalBox = styled("form")(({ theme }) => ({
     position: "absolute",
@@ -24,3 +24,8 @@ export const AddExpenseBtn = styled(Button)({
     marginTop: 4,
     marginBottom: -10
 });
+
+export const TypographyError = styled(Typography)({
+    color: "red",
+    fontSize: "12"
+})

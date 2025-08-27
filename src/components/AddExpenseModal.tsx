@@ -1,4 +1,5 @@
 import {
+    Box,
     Modal,
     TextField,
     Typography,
@@ -8,7 +9,7 @@ import { useAddExpense, useGetExpenses } from "../services/api-hooks/expense.hoo
 import { ModalForm } from "./ModalForm";
 import type { ExpenseFormInputs } from "../types/form-input.types";
 import type { AddExpenseModalProps } from "../types/expense.types";
-import { ModalBox, AddExpenseBtn } from "./AddExpenseModal.styles";
+import { ModalBox, AddExpenseBtn, TypographyError } from "./AddExpenseModal.styles";
 import { useAppContext } from "../context/AppContext";
 import { useState } from "react";
 
@@ -69,14 +70,19 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
                         name="title"
                         control={control}
                         render={({ field, fieldState }) => (
-                            <TextField
-                                {...field}
-                                fullWidth
-                                label="Expense Title"
-                                margin="normal"
-                                error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                            />
+                            <Box display="flex" flexDirection="column" width="100%">
+                                <TextField
+                                    {...field}
+                                    fullWidth
+                                    label="Expense Title"
+                                    margin="normal"
+                                    error={!!fieldState.error}
+                                />
+                                {fieldState.error && (
+                                    <TypographyError>{fieldState.error.message}</TypographyError>
+                                )}
+                            </Box>
+
                         )}
                     />
 
@@ -84,15 +90,20 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
                         name="price"
                         control={control}
                         render={({ field, fieldState }) => (
-                            <TextField
-                                {...field}
-                                fullWidth
-                                label="Price"
-                                type="number"
-                                margin="normal"
-                                error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                            />
+                            <Box display="flex" flexDirection="column" width="100%">
+                                <TextField
+                                    {...field}
+                                    fullWidth
+                                    label="Price"
+                                    type="number"
+                                    margin="normal"
+                                    error={!!fieldState.error}
+                                />
+                                {fieldState.error && (
+                                    <TypographyError>{fieldState.error.message}</TypographyError>
+                                )}
+                            </Box>
+
                         )}
                     />
 

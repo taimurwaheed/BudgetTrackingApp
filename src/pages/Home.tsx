@@ -2,7 +2,7 @@ import { CircularProgress, Alert, Box } from "@mui/material";
 import { TableComponent } from "../components/TableComp";
 import { expenseColumns } from "../components/expenseColumns";
 import { Pagination } from "../components/PaginationComp";
-import { AddExpenseModal } from "../components/AddExpenseModa";
+import { AddExpenseModal } from "../components/AddExpenseModal";
 import { EditExpenseModal } from "../components/EditExpenseModal";
 import { ExpenseFilters } from "../components/ExpenseFilters";
 import Header from "../components/Header";
@@ -94,7 +94,7 @@ export default function BudgetTracker() {
                                     </LoadingBox>
                                 ) : error ? (
                                     <Alert severity="error">Failed to load expenses.</Alert>
-                                ) : currentExpenses.length > 0 ? (
+                                ) : (
                                     <TableWrapper>
                                         <TableHeader>
                                             <TableHeaderTitle variant="body1">Expense</TableHeaderTitle>
@@ -108,16 +108,21 @@ export default function BudgetTracker() {
                                                 setSelectedDate={setSelectedDate}
                                             />
                                         </TableHeader>
-                                        <TableComponent data={currentExpenses} columns={columns} />
-                                        <Pagination count={pageCount} page={page} onChange={handlePageChange} />
+
+                                        {currentExpenses.length > 0 ? (
+                                            <>
+                                                <TableComponent data={currentExpenses} columns={columns} />
+                                                <Pagination count={pageCount} page={page} onChange={handlePageChange} />
+                                            </>
+                                        ) : (
+                                            <AlertLoading>
+                                                <Alert severity="info">No expenses found.</Alert>
+                                            </AlertLoading>
+                                        )}
                                     </TableWrapper>
-                                ) : (
-                                    <AlertLoading>
-                                        <Alert severity="info">No expenses found.</Alert>
-                                    </AlertLoading>
                                 )}
 
-                                <AddExpenseModal open={isAddModalOpen} onClose={handleCloseAddModal} />
+                                {isAddModalOpen && <AddExpenseModal open={isAddModalOpen} onClose={handleCloseAddModal} />}
                                 {selectedExpense && (
                                     <EditExpenseModal
                                         open={isEditModalOpen}
