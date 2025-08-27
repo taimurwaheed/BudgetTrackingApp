@@ -1,10 +1,11 @@
 // src/components/EditExpenseModal.tsx
-import { Modal, Typography, Button, TextField } from "@mui/material";
+import { Modal, Typography, Button, TextField, Box } from "@mui/material";
 import { FormProvider, Controller } from "react-hook-form";
 import { useEffect } from "react";
 import type { EditExpenseModalProps } from "../types/expense.types";
 import { ModalBox, FormActions } from "./EditExpenseModal.styles";
 import { ModalForm } from "./ModalForm";
+import { ErrorType } from "../pages/Login.styles";
 
 export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
     open,
@@ -49,42 +50,66 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
                         <Controller
                             name="title"
                             control={formMethods.control}
-                            render={({ field }) => (
-                                <TextField {...field} label="Expense" fullWidth margin="normal" />
+                            render={({ field, fieldState }) => (
+                                <>
+                                    <Box position="relative" mb={2}>
+                                        <TextField
+                                            {...field}
+                                            label="Expense"
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!fieldState.error}
+                                        />
+                                        {fieldState.error && (
+                                            <ErrorType>{fieldState.error.message}</ErrorType>
+                                        )}
+                                    </Box>
+                                </>
                             )}
                         />
 
                         <Controller
                             name="price"
                             control={formMethods.control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    label="Price"
-                                    type="number"
-                                    fullWidth
-                                    margin="normal"
-                                />
+                            render={({ field, fieldState }) => (
+                                <Box position="relative" mb={2}>
+                                    <TextField
+                                        {...field}
+                                        label="Price"
+                                        type="number"
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!fieldState.error}
+                                    />{fieldState.error && (
+                                        <ErrorType>{fieldState.error.message}</ErrorType>
+                                    )}
+                                </Box>
                             )}
                         />
 
                         <Controller
                             name="date"
                             control={formMethods.control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    label="Date"
-                                    type="date"
-                                    fullWidth
-                                    margin="normal"
-                                    value={
-                                        field.value
-                                            ? new Date(field.value).toISOString().split("T")[0]
-                                            : ""
-                                    }
-                                    onChange={(e) => field.onChange(new Date(e.target.value))}
-                                />
+                            render={({ field, fieldState }) => (
+                                <Box position="relative" mb={3}>
+                                    <TextField
+                                        {...field}
+                                        type="date"
+                                        fullWidth
+                                        margin="normal"
+                                        value={
+                                            field.value
+                                                ? new Date(field.value).toISOString().split("T")[0]
+                                                : ""
+                                        }
+                                        onChange={(e) =>
+                                            field.onChange(e.target.value ? new Date(e.target.value) : null)
+                                        }
+                                        error={!!fieldState.error}
+                                    />{fieldState.error && (
+                                        <ErrorType>{fieldState.error.message}</ErrorType>
+                                    )}
+                                </Box>
                             )}
                         />
 

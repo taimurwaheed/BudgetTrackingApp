@@ -27,12 +27,30 @@ import {
     TableHeaderTitle,
     AnalysisStyle
 } from "./Home.styles";
+import CustomNotification from "../components/expenseNotification/CustomNotification";
 
 export default function BudgetTracker() {
     const { data: expenses = [], isLoading, error } = useGetExpenses();
     const { mutateAsync: deleteExpense } = useDeleteExpense();
     const { mutateAsync: editExpense } = useEditExpense();
     const { currentUser } = useAppContext();
+
+    const [notification, setNotification] = useState<{
+        open: boolean;
+        message: string;
+        severity: "success" | "update" | "delete" | "error";
+    }>({
+        open: false,
+        message: "",
+        severity: "success",
+    });
+
+    const showNotification = (message: string, severity: "success" | "update" | "delete" | "error") => {
+        setNotification({ open: true, message, severity });
+    };
+
+    const closeNotification = () => setNotification(prev => ({ ...prev, open: false }));
+
 
     const {
         sortBy,
@@ -62,7 +80,7 @@ export default function BudgetTracker() {
     } = useModalState();
 
     const totalExpenditure = expenses.reduce((sum, expense) => sum + expense.price, 0);
-    const columns = expenseColumns(deleteExpense, handleEditClick, totalExpenditure);
+    const columns = expenseColumns(deleteExpense, handleEditClick, totalExpenditure, showNotification);
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const handleToggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -72,6 +90,12 @@ export default function BudgetTracker() {
 
     return (
         <MainBoxContainer>
+            <CustomNotification
+                open={notification.open}
+                message={notification.message}
+                severity={notification.severity}
+                onClose={closeNotification}
+            />
             <Header onToggleSidebar={handleToggleSidebar} />
             <Box sx={{ display: 'flex', flexGrow: 1 }}>
                 <Sidebar currentPage={currentPage} onPageChange={onSidebarChange} collapsed={!isSidebarOpen} />
@@ -85,6 +109,7 @@ export default function BudgetTracker() {
                                 <AddExpenseButton variant="contained" color="primary" onClick={handleOpenAddModal}>
                                     Add Expense
                                 </AddExpenseButton>
+
                             </HeaderBox>
 
                             <MainBox collapsed={!isSidebarOpen}>
@@ -122,14 +147,15 @@ export default function BudgetTracker() {
                                     </TableWrapper>
                                 )}
 
-                                {isAddModalOpen && <AddExpenseModal open={isAddModalOpen} onClose={handleCloseAddModal} />}
-                                {selectedExpense && (
+                                {isAddModalOpen && <AddExpenseModal open={isAddModalOpen} onClose={handleCloseAddModal} showNotification={showNotification} />}
+                                {isEditModalOpen && (
                                     <EditExpenseModal
                                         open={isEditModalOpen}
                                         onClose={handleCloseEditModal}
                                         expense={selectedExpense}
                                         onSubmitExpense={async (updatedExpense) => {
                                             await editExpense(updatedExpense);
+                                            showNotification("Expense updated successfully", "update");
                                         }}
                                     />
                                 )}

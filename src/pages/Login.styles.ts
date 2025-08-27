@@ -5,15 +5,15 @@ export const RootContainer = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 95vh;       /* use min-height instead of height */
+  overflow: hidden;         /* prevent scroll from tiny overflows */
 `;
 
 export const MainStack = styled(Stack)`
   width: 100%;
   max-width: 1200px;
-  overflow: hidden;
   flex-direction: column-reverse;
-
+  min-height: 95vh;
   @media (min-width: 900px) {
     flex-direction: row;
   }
@@ -47,9 +47,11 @@ export const RightPanel = styled(Box)`
 
   img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
   }
 `;
+
 
 export const LogoWrapper = styled(Stack)`
   flex-direction: row;
@@ -85,6 +87,14 @@ export const LoginButton = styled(Button)`
 `;
 
 export const SignupText = styled(Typography)`
-  margin-top: -8px;
+  margin-top: 8px;
   text-align: center;
+`;
+
+export const ErrorType = styled(Typography)`
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  font-size: 0.75rem;
+  color: #d32f2f;
 `;

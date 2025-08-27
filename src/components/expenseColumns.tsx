@@ -14,7 +14,8 @@ import {
 export const expenseColumns = (
     onDelete: (id: string) => void,
     onEdit: (expense: Expense) => void,
-    userBudget: number
+    userBudget: number,
+    showNotification?: (message: string, severity: "success" | "update" | "delete" | "error") => void // ✅ add this
 ): Column<Expense>[] => [
         {
             key: "expense",
@@ -57,7 +58,16 @@ export const expenseColumns = (
             label: "Actions",
             cellRenderer: (row) => (
                 <ActionBox>
-                    <IconButton color="error" onClick={() => onDelete(row.expenseId)}>
+                    <IconButton
+                        color="error"
+                        onClick={async () => {
+                            const confirmed = window.confirm("Are you sure you want to delete this expense?");
+                            if (!confirmed) return; // stop if user clicks "Cancel"
+
+                            await onDelete(row.expenseId);
+                            showNotification?.("Expense deleted successfully 🗑️", "delete");
+                        }}
+                    >
                         <DeleteIcon />
                     </IconButton>
                     <IconButton color="primary" onClick={() => onEdit(row)}>

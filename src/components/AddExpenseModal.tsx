@@ -9,11 +9,12 @@ import { useAddExpense, useGetExpenses } from "../services/api-hooks/expense.hoo
 import { ModalForm } from "./ModalForm";
 import type { ExpenseFormInputs } from "../types/form-input.types";
 import type { AddExpenseModalProps } from "../types/expense.types";
-import { ModalBox, AddExpenseBtn, TypographyError } from "./AddExpenseModal.styles";
+import { ModalBox, AddExpenseBtn } from "./AddExpenseModal.styles";
 import { useAppContext } from "../context/AppContext";
 import { useState } from "react";
+import { ErrorType } from "../pages/Login.styles";
 
-export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
+export const AddExpenseModal = ({ open, onClose, showNotification }: AddExpenseModalProps) => {
 
     const { currentUser } = useAppContext();
     const { data: expenses = [] } = useGetExpenses();
@@ -30,7 +31,7 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
         const userBudget = Number(currentUser?.budget) || 0;
 
         if (userBudget > 0 && newTotal > userBudget) {
-            setBudgetError("Can't Add More Expense, Budget limit Exceeded.");
+            setBudgetError("Budget limit Exceeded.");
             return;
         }
 
@@ -45,6 +46,7 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
                 onSuccess: () => {
                     reset();
                     onClose();
+                    showNotification("Expense added successfully", "success"); // ✅ add this
                 },
             }
         );
@@ -56,21 +58,23 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
 
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <Typography variant="h6" mb={2}>
+                <Typography variant="h6">
                     Add New Expense
                 </Typography>
 
                 <FormProvider {...methods}>
-                    {budgetError && (
-                        <Typography color="error" variant="body2" sx={{ mb: 1 }}>
-                            {budgetError}
-                        </Typography>
-                    )}
+                    <Box position="absolute" mt={4} alignContent={"center"}>
+                        {budgetError && (
+                            <Typography color="error" variant="body2" sx={{ mb: 0 }}>
+                                {budgetError}
+                            </Typography>
+                        )}
+                    </Box>
                     <Controller
                         name="title"
                         control={control}
                         render={({ field, fieldState }) => (
-                            <Box display="flex" flexDirection="column" width="100%">
+                            <Box position="relative" mb={0}>
                                 <TextField
                                     {...field}
                                     fullWidth
@@ -79,7 +83,7 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
                                     error={!!fieldState.error}
                                 />
                                 {fieldState.error && (
-                                    <TypographyError>{fieldState.error.message}</TypographyError>
+                                    <ErrorType>{fieldState.error.message}</ErrorType>
                                 )}
                             </Box>
 
@@ -90,7 +94,7 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
                         name="price"
                         control={control}
                         render={({ field, fieldState }) => (
-                            <Box display="flex" flexDirection="column" width="100%">
+                            <Box position="relative" mb={0}>
                                 <TextField
                                     {...field}
                                     fullWidth
@@ -100,7 +104,7 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
                                     error={!!fieldState.error}
                                 />
                                 {fieldState.error && (
-                                    <TypographyError>{fieldState.error.message}</TypographyError>
+                                    <ErrorType>{fieldState.error.message}</ErrorType>
                                 )}
                             </Box>
 
@@ -111,21 +115,25 @@ export const AddExpenseModal = ({ open, onClose }: AddExpenseModalProps) => {
                         name="date"
                         control={control}
                         render={({ field, fieldState }) => (
-                            <TextField
-                                {...field}
-                                fullWidth
-                                label="Date"
-                                type="date"
-                                margin="normal"
-                                value={
-                                    field.value
-                                        ? new Date(field.value).toISOString().split("T")[0]
-                                        : ""
-                                }
-                                onChange={(e) => field.onChange(new Date(e.target.value))}
-                                error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                            />
+                            <Box position="relative" mb={1}>
+                                <TextField
+                                    {...field}
+                                    type="date"
+                                    fullWidth
+                                    margin="normal"
+                                    value={
+                                        field.value
+                                            ? new Date(field.value).toISOString().split("T")[0]
+                                            : ""
+                                    }
+                                    onChange={(e) =>
+                                        field.onChange(e.target.value ? new Date(e.target.value) : null)
+                                    }
+                                    error={!!fieldState.error}
+                                />{fieldState.error && (
+                                    <ErrorType>{fieldState.error.message}</ErrorType>
+                                )}
+                            </Box>
                         )}
                     />
 

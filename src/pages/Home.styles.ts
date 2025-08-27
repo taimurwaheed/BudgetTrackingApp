@@ -5,7 +5,8 @@ import { styled } from "@mui/material/styles";
 export const MainBoxContainer = styled(Box)(() => ({
     display: "flex",
     flexDirection: "column",
-    minHeight: "100vh",
+    height: "97vh",
+    overflow: "hidden",
     background: "#ECF1F2",
 }));
 
@@ -17,10 +18,10 @@ export const TableHeaderTitle = styled(Typography)(() => ({
 export const MainBox = styled(Box, {
     shouldForwardProp: (prop) => prop !== "collapsed",
 })<{ collapsed: boolean }>(({ theme, collapsed }) => ({
-    background: "#FFFFFF",
-    boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
-    border: "1px solid #e0e0e0",
-    borderRadius: 8,
+    // background: "#FFFFFF",
+    // boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+    // border: "1px solid #e0e0e0",
+    // borderRadius: 8,
     flex: 1,
     height: "fit-content",
     transition: "margin-left 0.3s ease, width 0.3s ease",
@@ -60,14 +61,14 @@ export const LoadingBox = styled(Box)(() => ({
 
 // Alert container for info/error messages
 export const AlertLoading = styled(Box)(() => ({
-    marginTop: 8,
+    // marginTop: 8,
 }));
 
 // Expense table container (scrollable + styled)
 export const TableWrapper = styled(Box)(() => ({
     display: "flex",
     flexDirection: "column",
-    height: "100%",
+    height: "70vh",
     border: "1px solid #e0e0e0",
     borderRadius: 8,
     overflow: "hidden",
@@ -101,7 +102,7 @@ export const PageTitle = styled(Typography, {
 export const AnalysisStyle = styled(Box, {
     shouldForwardProp: (prop) => prop !== "collapsed",
 })<{ collapsed: boolean }>(({ theme, collapsed }) => ({
-    marginLeft: collapsed ? 0 : 150, // same as MainBox/PageTitle
+    marginLeft: collapsed ? 0 : 180, // same as MainBox/PageTitle
     padding: theme.spacing(3),       // give some padding inside
     transition: "margin-left 0.3s ease",
     [theme.breakpoints.down("sm")]: {

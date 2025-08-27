@@ -3,33 +3,42 @@ import { Box, Typography, Paper, FormControl } from "@mui/material";
 
 // Outer container for AnalysisPage
 export const AnalysisContainer = styled(Box)(({ theme }) => ({
-    paddingLeft: theme.spacing(7),
-    paddingRight: theme.spacing(7),
-    margin: theme.spacing(3),
-    marginTop: theme.spacing(2),
+    paddingLeft: theme.spacing(6),
+    // margin: theme.spacing(4),
+    // marginTop: theme.spacing(1),
+    height: "100vh",
+    overflow: "hidden",
 }));
+
+// ye kaam expense page pe krna hai
+// export const AnalysisContainer = styled(Box)(({ theme }) => ({
+//     paddingLeft: theme.spacing(6),
+//     margin: theme.spacing(4),
+//     marginTop: theme.spacing(1),
+//     height: "40vh",
+//     overflowY: "auto",   // 👈 ye add karo
+// }));
 
 // Page title "Analysis"
 export const AnalysisTitle = styled(Typography)(({ theme }) => ({
     fontWeight: 600,
     color: theme.palette.text.primary,
-    marginBottom: theme.spacing(10),
+    marginBottom: theme.spacing(2),
 }));
 
 // Paper wrapper for chart section
 export const AnalysisPaper = styled(Paper)(({ theme }) => ({
     borderRadius: 8,
     padding: theme.spacing(2),
-    border: "1px solid",
+    // border: "1px solid",
     borderColor: theme.palette.grey[300],
 }));
 
 // Header container (title + select)
-export const AnalysisHeader = styled(Box)(({ theme }) => ({
+export const AnalysisHeader = styled(Box)(() => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: theme.spacing(3),
 }));
 
 // Typography for header text

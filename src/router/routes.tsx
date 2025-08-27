@@ -6,7 +6,6 @@ import { useEffect, type ReactNode } from "react";
 import BudgetTracker from "../pages/Home";
 import { AppProvider, useAppContext } from "../context/AppContext";
 import { useCurrentUser } from "../services/api-hooks/user.hook";
-import { CircularProgress } from "@mui/material";
 import AnalysisWrapper from "../components/expenseAnalysis/AnalysisWrapper";
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
@@ -19,7 +18,7 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
         if (loggedInUser) setCurrentUser(loggedInUser);
     }, [loggedInUser, setCurrentUser]);
 
-    if (isLoading) return <CircularProgress />;
+    if (isLoading) return null;
     return loggedInUser ? <>{children}</> : <Navigate to="/login" />;
 };
 
