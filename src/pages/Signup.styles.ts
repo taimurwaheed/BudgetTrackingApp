@@ -5,7 +5,7 @@ export const Root = styled(Box)(() => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "120vh",
+    height: "85vh",
 }));
 
 export const Wrapper = styled(Stack)(() => ({
@@ -20,7 +20,8 @@ export const Wrapper = styled(Stack)(() => ({
 
 export const LeftPanel = styled(Box)(({ theme }) => ({
     flex: 1,
-    padding: theme.spacing(8),
+    paddingTop: theme.spacing(10),
+    paddingRight: theme.spacing(6),
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -57,7 +58,7 @@ export const WelcomeBox = styled(Box)(({ theme }) => ({
 
 export const Title = styled(Typography)(() => ({
     fontWeight: 600,
-    marginBottom: 4,
+    marginTop: 8
 }));
 
 export const Form = styled("form")(({ theme }) => ({
@@ -85,7 +86,7 @@ export const RightPanel = styled(Box)(({ theme }) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: theme.spacing(8),
+    paddingTop: theme.spacing(17),
     [theme.breakpoints.down("md")]: {
         display: "none",
         padding: 0,

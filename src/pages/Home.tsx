@@ -1,26 +1,56 @@
-import { Button, Typography, CircularProgress, Alert, Box } from "@mui/material";
+import { CircularProgress, Alert, Box } from "@mui/material";
 import { TableComponent } from "../components/TableComp";
 import { expenseColumns } from "../components/expenseColumns";
 import { Pagination } from "../components/PaginationComp";
-import { AddExpenseModal } from "../components/AddExpenseModa";
+import { AddExpenseModal } from "../components/AddExpenseModal";
 import { EditExpenseModal } from "../components/EditExpenseModal";
 import { ExpenseFilters } from "../components/ExpenseFilters";
-import { LoadingBox, AlertLoading, SectionBox, HeaderBox } from "./Home.styles";
+import Header from "../components/Header";
+import Sidebar from "../components/expenseSidebar/Sidebar";
+import AnalysisPage from "../components/expenseAnalysis/AnalysisPage";
 import { useExpenseFilters } from "../hooks/expense/useExpenseFilters";
 import { useModalState } from "../hooks/expense/useModalState";
 import { useTableAndPagination } from "../hooks/expense/useTableAndPagination";
 import { useDeleteExpense, useEditExpense, useGetExpenses } from "../services/api-hooks/expense.hook";
-import Header from "../components/Header";
-import { useState } from "react";
-import Sidebar from "../components/expenseSidebar/Sidebar";
-import AnalysisPage from "../components/expenseAnalysis/AnalysisPage";
 import { useAppContext } from "../context/AppContext";
+import { useState } from "react";
+import {
+    MainBoxContainer,
+    MainBox,
+    HeaderBox,
+    LoadingBox,
+    AlertLoading,
+    TableWrapper,
+    TableHeader,
+    AddExpenseButton,
+    PageTitle,
+    TableHeaderTitle,
+    AnalysisStyle
+} from "./Home.styles";
+import CustomNotification from "../components/expenseNotification/CustomNotification";
 
 export default function BudgetTracker() {
     const { data: expenses = [], isLoading, error } = useGetExpenses();
     const { mutateAsync: deleteExpense } = useDeleteExpense();
     const { mutateAsync: editExpense } = useEditExpense();
-    const { currentUser } = useAppContext()
+    const { currentUser } = useAppContext();
+
+    const [notification, setNotification] = useState<{
+        open: boolean;
+        message: string;
+        severity: "success" | "update" | "delete" | "error";
+    }>({
+        open: false,
+        message: "",
+        severity: "success",
+    });
+
+    const showNotification = (message: string, severity: "success" | "update" | "delete" | "error") => {
+        setNotification({ open: true, message, severity });
+    };
+
+    const closeNotification = () => setNotification(prev => ({ ...prev, open: false }));
+
 
     const {
         sortBy,
@@ -49,98 +79,95 @@ export default function BudgetTracker() {
         handleCloseEditModal,
     } = useModalState();
 
-    const totalExpenditure = expenses.reduce(
-        (sum, expense) => sum + expense.price,
-        0
-    );
-
-    const columns = expenseColumns(deleteExpense, handleEditClick, totalExpenditure);
+    const totalExpenditure = expenses.reduce((sum, expense) => sum + expense.price, 0);
+    const columns = expenseColumns(deleteExpense, handleEditClick, totalExpenditure, showNotification);
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const handleToggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
     const [currentPage, setCurrentPage] = useState<"expenses" | "analysis">("expenses");
-    const onSidebarChange = (page: "expenses" | "analysis") => {
-        setCurrentPage(page);
-    };
+    const onSidebarChange = (page: "expenses" | "analysis") => setCurrentPage(page);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <MainBoxContainer>
+            <CustomNotification
+                open={notification.open}
+                message={notification.message}
+                severity={notification.severity}
+                onClose={closeNotification}
+            />
             <Header onToggleSidebar={handleToggleSidebar} />
             <Box sx={{ display: 'flex', flexGrow: 1 }}>
-                <Sidebar
-                    currentPage={currentPage}
-                    onPageChange={onSidebarChange}
-                    collapsed={!isSidebarOpen}
-                />
-                <Box sx={{ flexGrow: 1, p: 2, overflowY: 'auto' }}>
+                <Sidebar currentPage={currentPage} onPageChange={onSidebarChange} collapsed={!isSidebarOpen} />
+                <Box sx={{ flexGrow: 1, py: 8, px: 2, overflowX: 'hidden' }}>
                     {currentPage === "expenses" ? (
                         <>
-                            <SectionBox>
-                                <HeaderBox>
-                                    <Typography variant="h5">Expenses</Typography>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={handleOpenAddModal}
-                                    >
-                                        Add Expense
-                                    </Button>
-                                </HeaderBox>
+                            <HeaderBox>
+                                <PageTitle variant="h5" collapsed={!isSidebarOpen}>
+                                    Expenses
+                                </PageTitle>
+                                <AddExpenseButton variant="contained" color="primary" onClick={handleOpenAddModal}>
+                                    Add Expense
+                                </AddExpenseButton>
 
-                                <ExpenseFilters
-                                    sortBy={sortBy}
-                                    setSortBy={setSortBy}
-                                    searchTerm={searchTerm}
-                                    setSearchTerm={setSearchTerm}
-                                    selectedDate={selectedDate}
-                                    setSelectedDate={setSelectedDate}
-                                />
+                            </HeaderBox>
 
+                            <MainBox collapsed={!isSidebarOpen}>
                                 {isLoading ? (
                                     <LoadingBox>
                                         <CircularProgress />
                                     </LoadingBox>
                                 ) : error ? (
                                     <Alert severity="error">Failed to load expenses.</Alert>
-                                ) : currentExpenses.length > 0 ? (
-                                    <>
-                                        <TableComponent data={currentExpenses} columns={columns} />
-                                        <Pagination
-                                            count={pageCount}
-                                            page={page}
-                                            onChange={handlePageChange}
-                                        />
-                                    </>
                                 ) : (
-                                    <AlertLoading>
-                                        <Alert severity="info">No expenses found.</Alert>
-                                    </AlertLoading>
-                                )}
-                            </SectionBox>
+                                    <TableWrapper>
+                                        <TableHeader>
+                                            <TableHeaderTitle variant="body1">Expense</TableHeaderTitle>
+                                            <Box sx={{ flexGrow: 1 }} />
+                                            <ExpenseFilters
+                                                sortBy={sortBy}
+                                                setSortBy={setSortBy}
+                                                searchTerm={searchTerm}
+                                                setSearchTerm={setSearchTerm}
+                                                selectedDate={selectedDate}
+                                                setSelectedDate={setSelectedDate}
+                                            />
+                                        </TableHeader>
 
-                            <AddExpenseModal
-                                open={isAddModalOpen}
-                                onClose={handleCloseAddModal}
-                            />
-                            {selectedExpense && (
-                                <EditExpenseModal
-                                    open={isEditModalOpen}
-                                    onClose={handleCloseEditModal}
-                                    expense={selectedExpense}
-                                    onSubmitExpense={async (updatedExpense) => {
-                                        await editExpense(updatedExpense);
-                                    }}
-                                />
-                            )}
+                                        {currentExpenses.length > 0 ? (
+                                            <>
+                                                <TableComponent data={currentExpenses} columns={columns} />
+                                                <Pagination count={pageCount} page={page} onChange={handlePageChange} />
+                                            </>
+                                        ) : (
+                                            <AlertLoading>
+                                                <Alert severity="info">No expenses found.</Alert>
+                                            </AlertLoading>
+                                        )}
+                                    </TableWrapper>
+                                )}
+
+                                {isAddModalOpen && <AddExpenseModal open={isAddModalOpen} onClose={handleCloseAddModal} showNotification={showNotification} />}
+                                {isEditModalOpen && (
+                                    <EditExpenseModal
+                                        open={isEditModalOpen}
+                                        onClose={handleCloseEditModal}
+                                        expense={selectedExpense}
+                                        onSubmitExpense={async (updatedExpense) => {
+                                            await editExpense(updatedExpense);
+                                            showNotification("Expense updated successfully", "update");
+                                        }}
+                                    />
+                                )}
+                            </MainBox>
                         </>
                     ) : (
-                        // ✅ Render the AnalysisPage when currentPage is "analysis"
-                        <AnalysisPage expenses={expenses}
-                            userBudget={Number(currentUser?.budget)} />
+                        <AnalysisStyle collapsed={!isSidebarOpen} >
+                            <AnalysisPage expenses={expenses} userBudget={Number(currentUser?.budget)} />
+                        </AnalysisStyle>
                     )}
                 </Box>
             </Box>
-        </Box>
+        </MainBoxContainer>
     );
-} 
+}

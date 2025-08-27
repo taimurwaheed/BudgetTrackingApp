@@ -28,6 +28,7 @@ export interface EditExpenseModalProps {
 export interface AddExpenseModalProps {
     open: boolean;
     onClose: () => void;
+    showNotification: (message: string, severity: "success" | "update" | "delete" | "error") => void;
 }
 
 export interface PaginationProps {

@@ -17,15 +17,19 @@ export const ProgressContainer = styled(Box)({
     alignItems: "center",
 });
 
+export const PriceRow = styled(Box)({
+    width: 20
+});
+
 // Box containing progress bar
 export const ProgressBarBox = styled(Box)({
-    width: "100%",
+    width: "50%",
     marginRight: 8, // instead of mr: 1
 });
 
 // Percentage text box
 export const PercentageBox = styled(Box)({
-    minWidth: 35,
+    minWidth: 50,
 });
 
 // Action buttons container

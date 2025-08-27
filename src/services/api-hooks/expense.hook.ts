@@ -52,6 +52,7 @@ export const useEditExpense = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["expenses"] });
+
         },
     });
 };

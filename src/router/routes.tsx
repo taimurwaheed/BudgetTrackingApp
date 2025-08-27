@@ -6,17 +6,19 @@ import { useEffect, type ReactNode } from "react";
 import BudgetTracker from "../pages/Home";
 import { AppProvider, useAppContext } from "../context/AppContext";
 import { useCurrentUser } from "../services/api-hooks/user.hook";
-import { CircularProgress } from "@mui/material";
+import AnalysisWrapper from "../components/expenseAnalysis/AnalysisWrapper";
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const { setCurrentUser } = useAppContext();
     const { data: loggedInUser, isLoading } = useCurrentUser();
+    console.log("PrivateRoute loggedInUser", loggedInUser, "loading:", isLoading);
+
 
     useEffect(() => {
         if (loggedInUser) setCurrentUser(loggedInUser);
     }, [loggedInUser, setCurrentUser]);
 
-    if (isLoading) return <CircularProgress />;
+    if (isLoading) return null;
     return loggedInUser ? <>{children}</> : <Navigate to="/login" />;
 };
 
@@ -29,13 +31,16 @@ export default function AppRoutes() {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/password-reset" element={<ResetPassword />} />
                     <Route
-                        path="/home"
                         element={
                             <PrivateRoute>
                                 <BudgetTracker />
                             </PrivateRoute>
                         }
-                    />
+                    >
+                        <Route path="/home" element={<BudgetTracker />} />
+                        <Route path="/analysis" element={<AnalysisWrapper />} />
+                    </Route>
+
                     <Route path="*" element={<Navigate to="/login" />} />
                 </Routes>
             </AppProvider>
