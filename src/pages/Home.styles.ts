@@ -28,8 +28,8 @@ export const MainBox = styled(Box, {
     marginLeft: collapsed ? "120px" : "240px",
     width: collapsed ? "calc(100% - 120px)" : "calc(100% - 240px)",
     [theme.breakpoints.down("sm")]: {
-        marginLeft: 0,
-        width: "100%",
+        marginLeft: 78,
+        width: "80%",
     },
 }));
 
